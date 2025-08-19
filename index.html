@@ -5,69 +5,549 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <title>Attendance Tracker - Fixed</title>
+    <title>Attendance Tracker - Enhanced</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #e3f2fd, #bbdefb); min-height: 100vh; padding: 20px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+        }
         .container { max-width: 1200px; margin: 0 auto; }
-        .header { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .header h1 { color: #1976d2; margin-bottom: 5px; }
-        .header p { color: #666; }
-        .tabs { display: flex; gap: 10px; margin-top: 20px; }
-        .tab { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; background: #e0e0e0; }
-        .tab.active { background: #1976d2; color: white; }
-        .content { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .date-section { margin-bottom: 20px; }
-        .date-section input { width: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        .selected-info { margin-top: 10px; padding: 15px; background: #e3f2fd; border-radius: 5px; }
-        .classes-grid { display: grid; gap: 15px; }
-        .class-item { border: 1px solid #ddd; border-radius: 8px; padding: 15px; position: relative; }
-        .class-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .subject-code { background: #1976d2; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .class-type { padding: 3px 8px; border-radius: 3px; font-size: 11px; margin-left: 10px; }
-        .lecture { background: #e8f5e8; color: #2e7d32; }
-        .practical { background: #fff3e0; color: #ef6c00; }
-        .tutorial { background: #f3e5f5; color: #7b1fa2; }
-        .attendance-buttons { display: flex; gap: 10px; margin-top: 10px; }
-        .btn { padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
-        .btn-present { background: #4caf50; color: white; }
-        .btn-absent { background: #f44336; color: white; }
-        .btn-present.selected { background: #2e7d32; }
-        .btn-absent.selected { background: #c62828; }
-        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .summary-card { background: #f5f5f5; padding: 20px; border-radius: 8px; }
-        .percentage { font-size: 24px; font-weight: bold; margin: 10px 0; }
-        .good { color: #4caf50; }
-        .warning { color: #ff9800; }
-        .danger { color: #f44336; }
+        
+        .header { 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(10px);
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; 
+            animation: slideInFromTop 0.6s ease-out;
+        }
+        .header h1 { 
+            color: #1976d2; 
+            margin-bottom: 5px; 
+            font-size: 2.2em;
+            background: linear-gradient(45deg, #1976d2, #42a5f5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { color: #666; font-size: 1.1em; }
+        
+        .tabs { 
+            display: flex; 
+            gap: 5px; 
+            margin-top: 25px; 
+            background: rgba(0,0,0,0.05);
+            padding: 5px;
+            border-radius: 15px;
+        }
+        .tab { 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            background: transparent;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .tab:hover::before { left: 100%; }
+        .tab.active { 
+            background: linear-gradient(45deg, #1976d2, #42a5f5); 
+            color: white; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(25,118,210,0.3);
+        }
+        
+        .content { 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(10px);
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .date-section { margin-bottom: 25px; }
+        .date-section h3 { color: #1976d2; margin-bottom: 15px; }
+        .date-section input { 
+            width: 220px; 
+            padding: 12px 16px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 12px; 
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .date-section input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25,118,210,0.1);
+            transform: translateY(-1px);
+        }
+        
+        .selected-info { 
+            margin-top: 15px; 
+            padding: 20px; 
+            background: linear-gradient(45deg, #e3f2fd, #f3e5f5); 
+            border-radius: 15px;
+            border-left: 5px solid #1976d2;
+            animation: slideInFromLeft 0.5s ease-out;
+        }
+        
+        .classes-grid { 
+            display: grid; 
+            gap: 20px; 
+            animation: staggerIn 0.6s ease-out;
+        }
+        .class-item { 
+            border: 2px solid #e0e0e0; 
+            border-radius: 16px; 
+            padding: 20px; 
+            position: relative; 
+            background: rgba(255,255,255,0.9);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        .class-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(25,118,210,0.05), transparent);
+            transition: left 0.6s;
+        }
+        .class-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            border-color: #1976d2;
+        }
+        .class-item:hover::before { left: 100%; }
+        
+        .class-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        .subject-code { 
+            background: linear-gradient(45deg, #1976d2, #42a5f5); 
+            color: white; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(25,118,210,0.3);
+        }
+        .class-type { 
+            padding: 6px 12px; 
+            border-radius: 15px; 
+            font-size: 12px; 
+            margin-left: 12px;
+            font-weight: 600;
+        }
+        .lecture { background: linear-gradient(45deg, #e8f5e8, #c8e6c9); color: #2e7d32; }
+        .practical { background: linear-gradient(45deg, #fff3e0, #ffe0b2); color: #ef6c00; }
+        .tutorial { background: linear-gradient(45deg, #f3e5f5, #e1bee7); color: #7b1fa2; }
+        
+        .attendance-buttons { 
+            display: flex; 
+            gap: 12px; 
+            margin-top: 15px; 
+            animation: slideInFromBottom 0.4s ease-out;
+        }
+        .btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        .btn-present { background: linear-gradient(45deg, #4caf50, #66bb6a); color: white; }
+        .btn-absent { background: linear-gradient(45deg, #f44336, #ef5350); color: white; }
+        .btn-present:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76,175,80,0.3); }
+        .btn-absent:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244,67,54,0.3); }
+        .btn-present.selected { background: linear-gradient(45deg, #2e7d32, #388e3c); transform: scale(1.05); }
+        .btn-absent.selected { background: linear-gradient(45deg, #c62828, #d32f2f); transform: scale(1.05); }
+        
+        .summary-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+        .summary-card { 
+            background: linear-gradient(45deg, #f8f9fa, #ffffff); 
+            padding: 25px; 
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .summary-card:hover {
+            transform: translateY(-5px);
+            border-color: #1976d2;
+        }
+        .percentage { 
+            font-size: 2.5em; 
+            font-weight: 700; 
+            margin: 15px 0;
+            background: linear-gradient(45deg, #1976d2, #42a5f5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .good { background: linear-gradient(45deg, #4caf50, #66bb6a) !important; -webkit-text-fill-color: transparent; }
+        .warning { background: linear-gradient(45deg, #ff9800, #ffb74d) !important; -webkit-text-fill-color: transparent; }
+        .danger { background: linear-gradient(45deg, #f44336, #ef5350) !important; -webkit-text-fill-color: transparent; }
+        
         .hidden { display: none; }
-        .export-section { margin: 20px 0; padding: 15px; background: #f0f8ff; border-radius: 8px; }
-        .export-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-export { background: #1976d2; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-export:hover { background: #1565c0; }
-        .holiday-section { margin: 20px 0; padding: 15px; background: #fff3e0; border-radius: 8px; }
-        .holiday-input { display: flex; gap: 10px; align-items: center; margin: 10px 0; }
-        .holiday-list { margin-top: 15px; }
-        .holiday-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 4px; margin: 5px 0; }
-        .btn-remove { background: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px; }
-        .btn-add { background: #4caf50; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
-        .settings-view { max-width: 800px; }
-        .btn-undo { background: #ff9800; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px; margin-left: 5px; }
-        .btn-undo:hover { background: #f57c00; }
-        .footer { margin-top: 40px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
-        .footer h4 { color: #1976d2; margin-bottom: 15px; }
-        .contact-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; text-align: left; }
-        .contact-item { background: #f5f5f5; padding: 15px; border-radius: 8px; }
+        
+        .export-section, .holiday-section, .edit-section, .timetable-section { 
+            margin: 25px 0; 
+            padding: 20px; 
+            background: linear-gradient(45deg, #f0f8ff, #e6f3ff); 
+            border-radius: 16px;
+            border: 2px solid rgba(25,118,210,0.1);
+            animation: fadeInUp 0.5s ease-out;
+        }
+        .timetable-section { background: linear-gradient(45deg, #e8f5e8, #f1f8e9); }
+        
+        .export-buttons, .timetable-actions { 
+            display: flex; 
+            gap: 12px; 
+            flex-wrap: wrap; 
+            margin-top: 15px;
+        }
+        .btn-export, .btn-timetable { 
+            background: linear-gradient(45deg, #1976d2, #42a5f5); 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 25px; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-export:hover, .btn-timetable:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 25px rgba(25,118,210,0.3);
+        }
+        .btn-export:active, .btn-timetable:active { transform: translateY(-1px); }
+        
+        .holiday-input, .edit-input { 
+            display: flex; 
+            gap: 12px; 
+            align-items: center; 
+            margin: 15px 0; 
+            flex-wrap: wrap; 
+        }
+        .holiday-list { margin-top: 20px; }
+        .holiday-item, .timetable-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px; 
+            background: rgba(255,255,255,0.9); 
+            border-radius: 12px; 
+            margin: 8px 0;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            animation: slideInFromRight 0.4s ease-out;
+        }
+        .holiday-item:hover, .timetable-item:hover {
+            border-color: #1976d2;
+            transform: translateX(5px);
+        }
+        
+        .btn-remove, .btn-edit-time { 
+            background: linear-gradient(45deg, #f44336, #ef5350); 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-edit-time { background: linear-gradient(45deg, #ff9800, #ffb74d); margin-right: 8px; }
+        .btn-remove:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(244,67,54,0.3); }
+        .btn-edit-time:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(255,152,0,0.3); }
+        
+        .btn-add { 
+            background: linear-gradient(45deg, #4caf50, #66bb6a); 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 25px; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-add:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(76,175,80,0.3);
+        }
+        
+        .settings-view { max-width: 900px; }
+        .btn-undo { 
+            background: linear-gradient(45deg, #ff9800, #ffb74d); 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 12px; 
+            margin-left: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-undo:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 4px 15px rgba(255,152,0,0.3);
+        }
+        
+        .footer { 
+            margin-top: 40px; 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(10px);
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+            text-align: center;
+            animation: slideInFromBottom 0.6s ease-out;
+        }
+        .footer h4 { color: #1976d2; margin-bottom: 20px; font-size: 1.4em; }
+        .contact-info { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+            text-align: left; 
+        }
+        .contact-item { 
+            background: linear-gradient(45deg, #f5f5f5, #fafafa); 
+            padding: 20px; 
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .contact-item:hover {
+            border-color: #1976d2;
+            transform: translateY(-3px);
+        }
         .contact-item strong { color: #1976d2; }
-        .contact-item a { color: #1976d2; text-decoration: none; }
-        .contact-item a:hover { text-decoration: underline; }
-        .edit-section { margin: 20px 0; padding: 15px; background: #e8f5e8; border-radius: 8px; }
-        .edit-input { display: flex; gap: 10px; align-items: center; margin: 10px 0; flex-wrap: wrap; }
+        .contact-item a { color: #1976d2; text-decoration: none; transition: color 0.3s ease; }
+        .contact-item a:hover { color: #0d47a1; text-decoration: underline; }
+        
         /* Modal */
-        .modal { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: white; padding: 18px; border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,0.2); z-index: 9999; width: 320px; }
-        .modal h4 { margin-bottom: 10px; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 9998; }
-        .add-slot { margin-top: 15px; padding: 12px; background: #f5f5f5; border-radius: 8px; }
+        .modal { 
+            position: fixed; 
+            left: 50%; 
+            top: 50%; 
+            transform: translate(-50%, -50%) scale(0.8); 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+            z-index: 9999; 
+            width: 400px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal.show { 
+            transform: translate(-50%, -50%) scale(1); 
+            opacity: 1;
+        }
+        .modal h4 { margin-bottom: 15px; color: #1976d2; }
+        .overlay { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 9998; 
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .overlay.show { opacity: 1; }
+        
+        .add-slot { 
+            margin-top: 20px; 
+            padding: 20px; 
+            background: linear-gradient(45deg, #f5f5f5, #fafafa); 
+            border-radius: 16px;
+            border: 2px solid rgba(25,118,210,0.1);
+            transition: all 0.3s ease;
+        }
+        .add-slot:hover {
+            border-color: rgba(25,118,210,0.3);
+        }
+        
+        /* Timetable specific styles */
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .day-schedule {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(25,118,210,0.1);
+            transition: all 0.3s ease;
+        }
+        .day-schedule:hover {
+            border-color: #1976d2;
+            transform: translateY(-2px);
+        }
+        .day-title {
+            color: #1976d2;
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .time-slot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        .time-slot:hover {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+        .time-slot-actions {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .form-row input, .form-row select {
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .form-row input:focus, .form-row select:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25,118,210,0.1);
+        }
+        
+        /* Animations */
+        @keyframes slideInFromTop {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideInFromBottom {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-20px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInFromRight {
+            0% { transform: translateX(20px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes staggerIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .success-animation {
+            animation: pulse 0.6s ease-in-out;
+        }
+        
+        /* Success message */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(76,175,80,0.3);
+        }
+        .success-message.show {
+            transform: translateX(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .header { padding: 20px 15px; }
+            .content { padding: 20px 15px; }
+            .tabs { flex-direction: column; }
+            .tab { text-align: center; }
+            .form-row { flex-direction: column; align-items: stretch; }
+            .modal { width: 90%; max-width: 350px; }
+        }
     </style>
 </head>
 <body>
@@ -76,9 +556,9 @@
             <h1>📚 Attendance Tracker</h1>
             <p>National Diploma in Technology - Moratuwa</p>
             <div class="tabs">
-                <button class="tab active" onclick="showView('daily', event)">Daily View</button>
-                <button class="tab" onclick="showView('summary', event)">Summary</button>
-                <button class="tab" onclick="showView('settings', event)">Settings</button>
+                <button class="tab active" onclick="showView('daily', event)">📅 Daily View</button>
+                <button class="tab" onclick="showView('summary', event)">📊 Summary</button>
+                <button class="tab" onclick="showView('settings', event)">⚙️ Settings</button>
             </div>
         </div>
 
@@ -93,14 +573,14 @@
             </div>
             
             <div>
-                <h3 id="classes-title">🕒 Classes for Monday</h3>
+                <h3 id="classes-title">🕐 Classes for Monday</h3>
                 <div id="classes-list" class="classes-grid">
                     <!-- Classes will be populated by JavaScript -->
                 </div>
 
                 <div class="add-slot">
-                    <h4>Add or adjust class for selected date</h4>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                    <h4>📝 Add or adjust class for selected date</h4>
+                    <div class="form-row">
                         <select id="add-time">
                             <option value="8.15am-9.15am">8:15 AM - 9:15 AM</option>
                             <option value="9.15am-10.15am">9:15 AM - 10:15 AM</option>
@@ -111,18 +591,15 @@
                             <option value="3.15pm-4.15pm">3:15 PM - 4:15 PM</option>
                             <option value="4.15pm-5.15pm">4:15 PM - 5:15 PM</option>
                         </select>
-
                         <select id="add-subject"></select>
-
                         <select id="add-type">
                             <option value="L">Lecture</option>
                             <option value="P">Practical</option>
                             <option value="T">Tutorial</option>
                         </select>
-
-                        <button class="btn-add" onclick="addSlotToDate()">Add/Update</button>
+                        <button class="btn-add" onclick="addSlotToDate()">✅ Add/Update</button>
                     </div>
-                    <p style="margin-top:8px;color:#666;font-size:13px;">Use this to add missing slots such as 3:15-5:15 for any day.</p>
+                    <p style="margin-top:12px;color:#666;font-size:14px;">💡 Use this to add missing slots or modify existing classes for the selected date.</p>
                 </div>
             </div>
         </div>
@@ -142,23 +619,66 @@
             
             <div class="summary-grid">
                 <div class="summary-card">
-                    <h4>Overall Attendance</h4>
+                    <h4>📈 Overall Attendance</h4>
                     <div id="overall-percentage" class="percentage good">0%</div>
-                    <p>Total Classes: <span id="total-classes">0</span></p>
-                    <p>Present: <span id="present-count">0</span></p>
-                    <p>Absent: <span id="absent-count">0</span></p>
-                    <p>Holidays Excluded: <span id="holiday-count">0</span></p>
+                    <p><strong>Total Classes:</strong> <span id="total-classes">0</span></p>
+                    <p><strong>Present:</strong> <span id="present-count">0</span></p>
+                    <p><strong>Absent:</strong> <span id="absent-count">0</span></p>
+                    <p><strong>Holidays Excluded:</strong> <span id="holiday-count">0</span></p>
                 </div>
                 
                 <div class="summary-card">
-                    <h4>Subject Breakdown</h4>
+                    <h4>📚 Subject Breakdown</h4>
                     <div id="subject-breakdown"></div>
                 </div>
             </div>
         </div>
 
         <div id="settings-view" class="content settings-view hidden">
-            <h3>⚙️ Settings</h3>
+            <h3>⚙️ Settings & Configuration</h3>
+            
+            <!-- Timetable Management Section -->
+            <div class="timetable-section">
+                <h4>📅 Timetable Management</h4>
+                <p>Manage your weekly class schedule. Changes here will be your default timetable.</p>
+                
+                <div class="form-row">
+                    <select id="timetable-day">
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+                    <select id="timetable-time">
+                        <option value="8.15am-9.15am">8:15 AM - 9:15 AM</option>
+                        <option value="9.15am-10.15am">9:15 AM - 10:15 AM</option>
+                        <option value="10.15am-11.15am">10:15 AM - 11:15 AM</option>
+                        <option value="11.15am-12.15pm">11:15 AM - 12:15 PM</option>
+                        <option value="1.15pm-2.15pm">1:15 PM - 2:15 PM</option>
+                        <option value="2.15pm-3.15pm">2:15 PM - 3:15 PM</option>
+                        <option value="3.15pm-4.15pm">3:15 PM - 4:15 PM</option>
+                        <option value="4.15pm-5.15pm">4:15 PM - 5:15 PM</option>
+                    </select>
+                    <select id="timetable-subject"></select>
+                    <select id="timetable-type">
+                        <option value="L">Lecture</option>
+                        <option value="P">Practical</option>
+                        <option value="T">Tutorial</option>
+                    </select>
+                </div>
+                
+                <div class="timetable-actions">
+                    <button class="btn-timetable" onclick="addToTimetable()">➕ Add to Timetable</button>
+                    <button class="btn-timetable" onclick="resetTimetable()" style="background: linear-gradient(45deg, #f44336, #ef5350);">🔄 Reset to Default</button>
+                </div>
+                
+                <div class="timetable-grid" id="timetable-display">
+                    <!-- Timetable will be displayed here -->
+                </div>
+            </div>
             
             <div class="holiday-section">
                 <h4>🏖️ Holiday Management</h4>
@@ -167,7 +687,7 @@
                 <div class="holiday-input">
                     <input type="date" id="holiday-date" />
                     <input type="text" id="holiday-name" placeholder="Holiday name (optional)" />
-                    <button class="btn-add" onclick="addHoliday()">Add Holiday</button>
+                    <button class="btn-add" onclick="addHoliday()">🎉 Add Holiday</button>
                 </div>
                 
                 <div class="holiday-list">
@@ -177,8 +697,8 @@
             </div>
 
             <div class="edit-section">
-                <h4>📝 Edit Schedule for Specific Dates</h4>
-                <p>Use the daily view to edit. This section keeps date-wide edits and backups.</p>
+                <h4>📝 Custom Schedule Changes</h4>
+                <p>View and manage date-specific schedule modifications. Use the daily view to make changes.</p>
                 
                 <div id="custom-schedule-display"></div>
             </div>
@@ -186,7 +706,7 @@
             <div class="export-section">
                 <h4>💾 Data Management</h4>
                 <div class="export-buttons">
-                    <button class="btn-export" onclick="clearAllData()">🗑️ Clear All Data</button>
+                    <button class="btn-export" onclick="clearAllData()" style="background: linear-gradient(45deg, #f44336, #ef5350);">🗑️ Clear All Data</button>
                     <button class="btn-export" onclick="exportData()">💾 Backup Data</button>
                     <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(event)" />
                     <button class="btn-export" onclick="document.getElementById('import-file').click()">📂 Import Data</button>
@@ -222,30 +742,54 @@
     </div>
 
     <!-- Edit modal -->
-    <div id="overlay" class="hidden"></div>
+    <div id="overlay" class="overlay hidden"></div>
     <div id="edit-modal" class="modal hidden" role="dialog" aria-hidden="true">
-        <h4>Edit class for date</h4>
+        <h4>✏️ Edit Class</h4>
         <div><strong>Date:</strong> <span id="edit-modal-date-text"></span></div>
         <div><strong>Time:</strong> <span id="edit-modal-time"></span></div>
-        <div style="margin-top:8px;">
+        <div class="form-row" style="margin-top:15px;">
             <select id="edit-modal-subject"></select>
-            <select id="edit-modal-type" style="margin-left:8px;">
+            <select id="edit-modal-type">
                 <option value="L">Lecture</option>
                 <option value="P">Practical</option>
                 <option value="T">Tutorial</option>
             </select>
         </div>
-        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;">
-            <button class="btn-undo" onclick="closeEditModal()">Cancel</button>
-            <button class="btn-add" onclick="saveEditModal()">Save</button>
+        <div style="margin-top:20px;display:flex;gap:12px;justify-content:flex-end;">
+            <button class="btn-undo" onclick="closeEditModal()">❌ Cancel</button>
+            <button class="btn-add" onclick="saveEditModal()">💾 Save</button>
         </div>
+    </div>
+
+    <!-- Timetable Edit Modal -->
+    <div id="timetable-edit-modal" class="modal hidden" role="dialog" aria-hidden="true">
+        <h4>📚 Edit Timetable Slot</h4>
+        <div><strong>Day:</strong> <span id="tt-edit-day"></span></div>
+        <div><strong>Time:</strong> <span id="tt-edit-time"></span></div>
+        <div class="form-row" style="margin-top:15px;">
+            <select id="tt-edit-subject"></select>
+            <select id="tt-edit-type">
+                <option value="L">Lecture</option>
+                <option value="P">Practical</option>
+                <option value="T">Tutorial</option>
+            </select>
+        </div>
+        <div style="margin-top:20px;display:flex;gap:12px;justify-content:flex-end;">
+            <button class="btn-remove" onclick="removeTimetableSlot()">🗑️ Remove</button>
+            <button class="btn-undo" onclick="closeTimetableEditModal()">❌ Cancel</button>
+            <button class="btn-add" onclick="saveTimetableEdit()">💾 Save</button>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="success-message hidden">
+        <span id="success-text">✅ Success!</span>
     </div>
 
     <!-- jsPDF for export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
-        // Original file reviewed: see uploaded file reference.
         // Subjects
         const subjects = {
             'IT1204': 'Fundamentals of Software Engineering',
@@ -260,8 +804,8 @@
             'IT1207': 'Object Oriented Programming'
         };
 
-        // Weekly schedule. Keep as default.
-        const schedule = {
+        // Default weekly schedule
+        const defaultSchedule = {
             'Monday': [
                 { time: '8.15am-9.15am', subject: 'IT1204', type: 'L' },
                 { time: '9.15am-10.15am', subject: 'IT1204', type: 'L' },
@@ -308,6 +852,9 @@
             'Sunday': []
         };
 
+        // Current schedule (can be modified)
+        let schedule = JSON.parse(localStorage.getItem('schedule')) || JSON.parse(JSON.stringify(defaultSchedule));
+
         // Attendance data
         let attendanceData = JSON.parse(localStorage.getItem('attendanceData') || '{}');
         let holidays = JSON.parse(localStorage.getItem('holidays') || '{}');
@@ -319,32 +866,65 @@
 
         // Populate subject selects
         function populateSubjectSelects() {
-            const addSub = document.getElementById('add-subject');
-            const editSub = document.getElementById('edit-modal-subject');
-            addSub.innerHTML = '';
-            editSub.innerHTML = '';
-            Object.keys(subjects).forEach(code => {
-                const opt = document.createElement('option');
-                opt.value = code;
-                opt.textContent = code + ' - ' + subjects[code];
-                addSub.appendChild(opt);
-                const opt2 = opt.cloneNode(true);
-                editSub.appendChild(opt2);
+            const selects = ['add-subject', 'edit-modal-subject', 'timetable-subject', 'tt-edit-subject'];
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '';
+                    Object.keys(subjects).forEach(code => {
+                        const opt = document.createElement('option');
+                        opt.value = code;
+                        opt.textContent = code + ' - ' + subjects[code];
+                        select.appendChild(opt);
+                    });
+                }
             });
         }
 
+        // Animation utilities
+        function showSuccessMessage(text) {
+            const msg = document.getElementById('success-message');
+            const textEl = document.getElementById('success-text');
+            textEl.textContent = text;
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('show'), 10);
+            setTimeout(() => {
+                msg.classList.remove('show');
+                setTimeout(() => msg.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        function animateElement(element, animationClass) {
+            element.classList.add(animationClass);
+            setTimeout(() => element.classList.remove(animationClass), 600);
+        }
+
+        // Initialize
         populateSubjectSelects();
         updateDate();
         displayHolidays();
         displayCustomSchedule();
+        displayTimetable();
 
         function showView(view, evt) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.content').forEach(content => content.classList.add('hidden'));
-            if (evt && evt.target) evt.target.classList.add('active');
-            document.getElementById(view + '-view').classList.remove('hidden');
-            if (view === 'summary') updateSummary();
-            if (view === 'settings') { displayHolidays(); displayCustomSchedule(); }
+            if (evt && evt.target) {
+                evt.target.classList.add('active');
+                animateElement(evt.target, 'success-animation');
+            }
+            const viewElement = document.getElementById(view + '-view');
+            viewElement.classList.remove('hidden');
+            
+            // Add stagger animation to content
+            setTimeout(() => {
+                if (view === 'summary') updateSummary();
+                if (view === 'settings') { 
+                    displayHolidays(); 
+                    displayCustomSchedule(); 
+                    displayTimetable();
+                }
+            }, 100);
         }
 
         function getDayName(dateString) {
@@ -357,12 +937,11 @@
             const dayName = getDayName(selectedDate);
             document.getElementById('selected-day').textContent = dayName;
             document.getElementById('selected-date').textContent = selectedDate;
-            document.getElementById('classes-title').textContent = `🕒 Classes for ${dayName}`;
+            document.getElementById('classes-title').textContent = `🕐 Classes for ${dayName}`;
             displayClasses(selectedDate, dayName);
         }
 
         function convertToMinutes(timeRange) {
-            // Expect format like 8.15am-9.15am
             const startTime = timeRange.split('-')[0].trim();
             const parts = startTime.match(/(\d{1,2})(?:\.(\d{1,2}))?\s*([ap]m)/i);
             if (!parts) return 0;
@@ -377,7 +956,6 @@
         function getMergedSchedule(date, day) {
             const defaults = schedule[day] || [];
             const custom = customSchedule[date] || [];
-            // remove defaults that are overridden by custom (same time)
             const filtered = defaults.filter(d => !custom.some(c => c.time === d.time));
             const merged = filtered.concat(custom);
             merged.sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
@@ -386,34 +964,45 @@
 
         function displayClasses(date, day) {
             const classList = document.getElementById('classes-list');
-            // holiday check
+            
             if (holidays[date]) {
-                classList.innerHTML = `<div class="class-item" style="background:#ffecb3;"><p>🏖️ Holiday: ${holidays[date]}</p><p>No classes scheduled</p></div>`;
+                classList.innerHTML = `
+                    <div class="class-item" style="background:linear-gradient(45deg, #ffecb3, #fff8e1);border-color:#ff9800;">
+                        <p style="font-size:1.2em;">🏖️ Holiday: ${holidays[date]}</p>
+                        <p style="color:#666;margin-top:8px;">No classes scheduled</p>
+                    </div>`;
                 return;
             }
+            
             const classes = getMergedSchedule(date, day);
             if (classes.length === 0) {
-                classList.innerHTML = '<div class="class-item"><p>📅 No classes scheduled for this day</p></div>';
+                classList.innerHTML = `
+                    <div class="class-item" style="background:linear-gradient(45deg, #f5f5f5, #fafafa);">
+                        <p style="font-size:1.2em;">📅 No classes scheduled for this day</p>
+                        <p style="color:#666;margin-top:8px;">Enjoy your free day!</p>
+                    </div>`;
                 return;
             }
-            classList.innerHTML = classes.map((cls) => {
+            
+            classList.innerHTML = classes.map((cls, index) => {
                 const key = `${date}-${cls.subject}-${cls.time}`;
                 const status = attendanceData[key];
                 const typeClass = cls.type === 'L' ? 'lecture' : cls.type === 'P' ? 'practical' : 'tutorial';
                 const typeName = cls.type === 'L' ? 'Lecture' : cls.type === 'P' ? 'Practical' : 'Tutorial';
+                
                 return `
-                    <div class="class-item">
+                    <div class="class-item" style="animation-delay: ${index * 0.1}s;">
                         <div class="class-header">
                             <div>
                                 <span class="subject-code">${cls.subject}</span>
                                 <span class="class-type ${typeClass}">${typeName}</span>
                             </div>
                             <div style="display:flex;gap:8px;align-items:center;">
-                                <button class="btn" onclick="openEditModal('${date}','${cls.time}','${cls.subject}','${cls.type}')">Edit</button>
+                                <button class="btn-edit-time" onclick="openEditModal('${date}','${cls.time}','${cls.subject}','${cls.type}')">✏️ Edit</button>
                             </div>
                         </div>
-                        <p><strong>${subjects[cls.subject] || cls.subject}</strong></p>
-                        <p>⏰ ${cls.time}</p>
+                        <p style="font-weight:600;margin:8px 0;"><strong>${subjects[cls.subject] || cls.subject}</strong></p>
+                        <p style="color:#666;">⏰ ${cls.time}</p>
                         <div class="attendance-buttons">
                             <button class="btn btn-present ${status === 'present' ? 'selected' : ''}" onclick="markAttendance('${date}','${cls.time}','${cls.subject}','present')">✅ Present</button>
                             <button class="btn btn-absent ${status === 'absent' ? 'selected' : ''}" onclick="markAttendance('${date}','${cls.time}','${cls.subject}','absent')">❌ Absent</button>
@@ -428,6 +1017,12 @@
             const key = `${date}-${subject}-${time}`;
             attendanceData[key] = status;
             localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            
+            // Success animation
+            const button = event.target;
+            animateElement(button, 'success-animation');
+            showSuccessMessage(`Marked as ${status === 'present' ? 'Present' : 'Absent'} ✅`);
+            
             updateDate();
         }
 
@@ -435,6 +1030,7 @@
             const key = `${date}-${subject}-${time}`;
             delete attendanceData[key];
             localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            showSuccessMessage('Attendance record removed ↩️');
             updateDate();
         }
 
@@ -444,18 +1040,22 @@
                 const date = key.split('-')[0];
                 if (!holidays[date]) nonHolidayAttendance[key] = attendanceData[key];
             });
+            
             const total = Object.keys(nonHolidayAttendance).length;
             const present = Object.values(nonHolidayAttendance).filter(s => s === 'present').length;
             const absent = Object.values(nonHolidayAttendance).filter(s => s === 'absent').length;
             const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
             const holidayCount = Object.keys(holidays).length;
+            
             document.getElementById('total-classes').textContent = total;
             document.getElementById('present-count').textContent = present;
             document.getElementById('absent-count').textContent = absent;
             document.getElementById('holiday-count').textContent = holidayCount;
+            
             const percentageEl = document.getElementById('overall-percentage');
             percentageEl.textContent = percentage + '%';
             percentageEl.className = 'percentage ' + (percentage >= 75 ? 'good' : percentage >= 50 ? 'warning' : 'danger');
+            
             const breakdown = document.getElementById('subject-breakdown');
             let subjectHtml = '';
             Object.keys(subjects).forEach(code => {
@@ -464,38 +1064,192 @@
                 const subjectPresent = subjectEntries.filter(key => nonHolidayAttendance[key] === 'present').length;
                 const subjectPercentage = subjectTotal > 0 ? Math.round((subjectPresent / subjectTotal) * 100) : 0;
                 const colorClass = subjectPercentage >= 75 ? 'good' : subjectPercentage >= 50 ? 'warning' : 'danger';
+                
                 if (subjectTotal > 0) {
-                    subjectHtml += `<div style="margin: 10px 0; padding: 10px; border-left: 4px solid #1976d2;"><strong>${code}</strong><br><span class="${colorClass}">${subjectPercentage}%</span> (${subjectPresent}/${subjectTotal})</div>`;
+                    subjectHtml += `
+                        <div style="margin: 12px 0; padding: 15px; border-left: 4px solid #1976d2; border-radius: 8px; background: rgba(25,118,210,0.05);">
+                            <strong>${code}</strong><br>
+                            <span class="${colorClass}" style="font-size:1.3em;">${subjectPercentage}%</span> 
+                            <span style="color:#666;">(${subjectPresent}/${subjectTotal})</span>
+                        </div>`;
                 }
             });
-            breakdown.innerHTML = subjectHtml || '<p>No attendance data yet</p>';
+            breakdown.innerHTML = subjectHtml || '<p style="color:#666;font-style:italic;">📝 No attendance data yet. Start marking attendance!</p>';
+        }
+
+        // Timetable Management Functions
+        function displayTimetable() {
+            const display = document.getElementById('timetable-display');
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            display.innerHTML = days.map(day => {
+                const dayClasses = schedule[day] || [];
+                return `
+                    <div class="day-schedule">
+                        <div class="day-title">${day}</div>
+                        ${dayClasses.length === 0 ? 
+                            '<p style="color:#666;font-style:italic;">No classes scheduled</p>' :
+                            dayClasses.map(cls => `
+                                <div class="time-slot">
+                                    <div>
+                                        <strong>${cls.time}</strong><br>
+                                        <span style="color:#1976d2;">${cls.subject}</span> - 
+                                        <span class="class-type ${cls.type === 'L' ? 'lecture' : cls.type === 'P' ? 'practical' : 'tutorial'}">${cls.type === 'L' ? 'Lecture' : cls.type === 'P' ? 'Practical' : 'Tutorial'}</span>
+                                    </div>
+                                    <div class="time-slot-actions">
+                                        <button class="btn-edit-time" onclick="openTimetableEditModal('${day}','${cls.time}','${cls.subject}','${cls.type}')">✏️</button>
+                                        <button class="btn-remove" onclick="removeTimetableSlot('${day}','${cls.time}')">🗑️</button>
+                                    </div>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToTimetable() {
+            const day = document.getElementById('timetable-day').value;
+            const time = document.getElementById('timetable-time').value;
+            const subject = document.getElementById('timetable-subject').value;
+            const type = document.getElementById('timetable-type').value;
+            
+            if (!schedule[day]) schedule[day] = [];
+            
+            // Remove existing class at same time
+            schedule[day] = schedule[day].filter(cls => cls.time !== time);
+            
+            // Add new class
+            schedule[day].push({ time, subject, type });
+            schedule[day].sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
+            
+            localStorage.setItem('schedule', JSON.stringify(schedule));
+            displayTimetable();
+            showSuccessMessage(`Added ${subject} to ${day} timetable! 📚`);
+        }
+
+        function removeTimetableSlot(day, time) {
+            if (!confirm(`Remove ${time} slot from ${day}?`)) return;
+            
+            if (schedule[day]) {
+                schedule[day] = schedule[day].filter(cls => cls.time !== time);
+                localStorage.setItem('schedule', JSON.stringify(schedule));
+                displayTimetable();
+                showSuccessMessage(`Removed ${time} slot from ${day} 🗑️`);
+            }
+        }
+
+        function resetTimetable() {
+            if (!confirm('Reset timetable to default? This will remove all your custom changes to the weekly schedule.')) return;
+            
+            schedule = JSON.parse(JSON.stringify(defaultSchedule));
+            localStorage.setItem('schedule', JSON.stringify(schedule));
+            displayTimetable();
+            showSuccessMessage('Timetable reset to default! 🔄');
+        }
+
+        // Timetable Edit Modal Functions
+        function openTimetableEditModal(day, time, subject, type) {
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('timetable-edit-modal');
+            
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                overlay.classList.add('show');
+                modal.classList.add('show');
+            }, 10);
+            
+            document.getElementById('tt-edit-day').textContent = day;
+            document.getElementById('tt-edit-time').textContent = time;
+            document.getElementById('tt-edit-subject').value = subject;
+            document.getElementById('tt-edit-type').value = type;
+            
+            modal.dataset.day = day;
+            modal.dataset.time = time;
+        }
+
+        function closeTimetableEditModal() {
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('timetable-edit-modal');
+            
+            overlay.classList.remove('show');
+            modal.classList.remove('show');
+            
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function saveTimetableEdit() {
+            const modal = document.getElementById('timetable-edit-modal');
+            const day = modal.dataset.day;
+            const oldTime = modal.dataset.time;
+            const subject = document.getElementById('tt-edit-subject').value;
+            const type = document.getElementById('tt-edit-type').value;
+            
+            if (schedule[day]) {
+                const classIndex = schedule[day].findIndex(cls => cls.time === oldTime);
+                if (classIndex !== -1) {
+                    schedule[day][classIndex] = { time: oldTime, subject, type };
+                    localStorage.setItem('schedule', JSON.stringify(schedule));
+                    displayTimetable();
+                    showSuccessMessage('Timetable updated! 💾');
+                }
+            }
+            
+            closeTimetableEditModal();
         }
 
         // Holiday functions
         function addHoliday() {
             const date = document.getElementById('holiday-date').value;
             const name = document.getElementById('holiday-name').value || 'Holiday';
-            if (!date) { alert('Select a date'); return; }
+            
+            if (!date) { 
+                alert('Please select a date'); 
+                return; 
+            }
+            
             holidays[date] = name;
             localStorage.setItem('holidays', JSON.stringify(holidays));
+            
             document.getElementById('holiday-date').value = '';
             document.getElementById('holiday-name').value = '';
+            
             displayHolidays();
+            showSuccessMessage(`Holiday "${name}" added! 🎉`);
         }
 
         function removeHoliday(date) {
+            const holidayName = holidays[date];
             delete holidays[date];
             localStorage.setItem('holidays', JSON.stringify(holidays));
             displayHolidays();
+            showSuccessMessage(`Holiday "${holidayName}" removed 🗑️`);
         }
 
         function displayHolidays() {
             const display = document.getElementById('holidays-display');
             const holidayDates = Object.keys(holidays).sort();
-            if (holidayDates.length === 0) { display.innerHTML = '<p>No holidays marked</p>'; return; }
-            display.innerHTML = holidayDates.map(date => {
+            
+            if (holidayDates.length === 0) { 
+                display.innerHTML = '<p style="color:#666;font-style:italic;">🗓️ No holidays marked yet</p>'; 
+                return; 
+            }
+            
+            display.innerHTML = holidayDates.map((date, index) => {
                 const dayName = getDayName(date);
-                return `<div class="holiday-item"><span><strong>${holidays[date]}</strong> - ${date} (${dayName})</span><button class="btn-remove" onclick="removeHoliday('${date}')">Remove</button></div>`;
+                return `
+                    <div class="holiday-item" style="animation-delay: ${index * 0.1}s;">
+                        <span>
+                            <strong style="color:#1976d2;">${holidays[date]}</strong><br>
+                            <span style="color:#666;">${date} (${dayName})</span>
+                        </span>
+                        <button class="btn-remove" onclick="removeHoliday('${date}')">🗑️ Remove</button>
+                    </div>`;
             }).join('');
         }
 
@@ -506,24 +1260,32 @@
                 const date = key.split('-')[0];
                 if (!holidays[date]) nonHolidayAttendance[key] = attendanceData[key];
             });
+            
             const total = Object.keys(nonHolidayAttendance).length;
             const present = Object.values(nonHolidayAttendance).filter(s => s === 'present').length;
             const absent = Object.values(nonHolidayAttendance).filter(s => s === 'absent').length;
             const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
+            
             let report = `ATTENDANCE REPORT\n================================\nNational Diploma in Technology - Moratuwa\nGenerated on: ${new Date().toLocaleDateString()}\n\nOVERALL STATISTICS\n------------------\nTotal Classes (excluding holidays): ${total}\nPresent: ${present}\nAbsent: ${absent}\nOverall Attendance: ${percentage}%\nHolidays Excluded: ${Object.keys(holidays).length}\n\nSUBJECT-WISE BREAKDOWN\n----------------------\n`;
+            
             Object.keys(subjects).forEach(code => {
                 const subjectEntries = Object.keys(nonHolidayAttendance).filter(key => key.includes(code));
                 const subjectTotal = subjectEntries.length;
                 const subjectPresent = subjectEntries.filter(key => nonHolidayAttendance[key] === 'present').length;
                 const subjectPercentage = subjectTotal > 0 ? Math.round((subjectPresent / subjectTotal) * 100) : 0;
+                
                 if (subjectTotal > 0) {
                     report += `${code}: ${subjectPercentage}% (${subjectPresent}/${subjectTotal}) - ${subjects[code]}\n`;
                 }
             });
+            
             if (Object.keys(holidays).length > 0) {
                 report += `\nHOLIDAYS EXCLUDED\n-----------------\n`;
-                Object.keys(holidays).sort().forEach(date => { report += `${date}: ${holidays[date]}\n`; });
+                Object.keys(holidays).sort().forEach(date => { 
+                    report += `${date}: ${holidays[date]}\n`; 
+                });
             }
+            
             return report;
         }
 
@@ -533,17 +1295,39 @@
                 const doc = new jsPDF();
                 const report = generateAttendanceReport();
                 const lines = report.split('\n');
-                let y = 14;
-                const lineHeight = 7;
-                const pageHeight = doc.internal.pageSize.height - 20;
-                lines.forEach(line => {
-                    if (y > pageHeight) { doc.addPage(); y = 14; }
-                    doc.text(line, 10, y);
+                let y = 20;
+                const lineHeight = 8;
+                const pageHeight = doc.internal.pageSize.height - 30;
+                
+                // Add title styling
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                
+                lines.forEach((line, index) => {
+                    if (y > pageHeight) { 
+                        doc.addPage(); 
+                        y = 20; 
+                    }
+                    
+                    if (index === 0) {
+                        doc.setFontSize(16);
+                        doc.setFont(undefined, 'bold');
+                    } else if (line.includes('STATISTICS') || line.includes('BREAKDOWN') || line.includes('HOLIDAYS')) {
+                        doc.setFontSize(12);
+                        doc.setFont(undefined, 'bold');
+                    } else {
+                        doc.setFontSize(10);
+                        doc.setFont(undefined, 'normal');
+                    }
+                    
+                    doc.text(line, 15, y);
                     y += lineHeight;
                 });
+                
                 doc.save('attendance-report.pdf');
+                showSuccessMessage('PDF report exported! 📄');
             } catch (e) {
-                alert('PDF export failed. Use Export as Text or host the file online.');
+                alert('PDF export failed. Please try Export as Text instead.');
             }
         }
 
@@ -551,28 +1335,95 @@
             const report = generateAttendanceReport();
             const blob = new Blob([report], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'attendance-report.txt'; a.click(); URL.revokeObjectURL(url);
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = 'attendance-report.txt'; 
+            a.click(); 
+            URL.revokeObjectURL(url);
+            showSuccessMessage('Text report exported! 📝');
         }
 
         function copyToClipboard() {
             const report = generateAttendanceReport();
-            navigator.clipboard.writeText(report).then(() => { alert('Attendance report copied to clipboard!'); }).catch(() => { const textarea = document.createElement('textarea'); textarea.value = report; document.body.appendChild(textarea); textarea.select(); document.execCommand('copy'); document.body.removeChild(textarea); alert('Attendance report copied to clipboard!'); });
+            navigator.clipboard.writeText(report).then(() => { 
+                showSuccessMessage('Report copied to clipboard! 📋');
+            }).catch(() => { 
+                const textarea = document.createElement('textarea'); 
+                textarea.value = report; 
+                document.body.appendChild(textarea); 
+                textarea.select(); 
+                document.execCommand('copy'); 
+                document.body.removeChild(textarea); 
+                showSuccessMessage('Report copied to clipboard! 📋');
+            });
         }
 
         // Data management
         function clearAllData() {
-            if (!confirm('Clear all attendance data?')) return;
-            localStorage.removeItem('attendanceData'); localStorage.removeItem('holidays'); localStorage.removeItem('customSchedule'); attendanceData = {}; holidays = {}; customSchedule = {}; updateDate(); displayHolidays(); alert('All data cleared');
+            if (!confirm('⚠️ Clear all attendance data? This action cannot be undone!')) return;
+            
+            localStorage.removeItem('attendanceData'); 
+            localStorage.removeItem('holidays'); 
+            localStorage.removeItem('customSchedule'); 
+            
+            attendanceData = {}; 
+            holidays = {}; 
+            customSchedule = {}; 
+            
+            updateDate(); 
+            displayHolidays(); 
+            displayCustomSchedule();
+            showSuccessMessage('All data cleared! 🗑️');
         }
 
         function exportData() {
-            const data = { attendanceData, holidays, customSchedule, exportDate: new Date().toISOString() };
+            const data = { 
+                attendanceData, 
+                holidays, 
+                customSchedule, 
+                schedule,
+                exportDate: new Date().toISOString() 
+            };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'attendance-backup.json'; a.click(); URL.revokeObjectURL(url);
+            const url = URL.createObjectURL(blob); 
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = 'attendance-backup.json'; 
+            a.click(); 
+            URL.revokeObjectURL(url);
+            showSuccessMessage('Data backup created! 💾');
         }
 
         function importData(event) {
-            const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (data.attendanceData) attendanceData = data.attendanceData; if (data.holidays) holidays = data.holidays; if (data.customSchedule) customSchedule = data.customSchedule; localStorage.setItem('attendanceData', JSON.stringify(attendanceData)); localStorage.setItem('holidays', JSON.stringify(holidays)); localStorage.setItem('customSchedule', JSON.stringify(customSchedule)); updateDate(); displayHolidays(); displayCustomSchedule(); alert('Data imported'); } catch (err) { alert('Invalid file'); } }; reader.readAsText(file);
+            const file = event.target.files[0]; 
+            if (!file) return; 
+            
+            const reader = new FileReader(); 
+            reader.onload = function(e) { 
+                try { 
+                    const data = JSON.parse(e.target.result); 
+                    
+                    if (data.attendanceData) attendanceData = data.attendanceData; 
+                    if (data.holidays) holidays = data.holidays; 
+                    if (data.customSchedule) customSchedule = data.customSchedule; 
+                    if (data.schedule) schedule = data.schedule;
+                    
+                    localStorage.setItem('attendanceData', JSON.stringify(attendanceData)); 
+                    localStorage.setItem('holidays', JSON.stringify(holidays)); 
+                    localStorage.setItem('customSchedule', JSON.stringify(customSchedule)); 
+                    localStorage.setItem('schedule', JSON.stringify(schedule));
+                    
+                    updateDate(); 
+                    displayHolidays(); 
+                    displayCustomSchedule(); 
+                    displayTimetable();
+                    
+                    showSuccessMessage('Data imported successfully! 📂');
+                } catch (err) { 
+                    alert('❌ Invalid backup file. Please select a valid JSON backup.'); 
+                } 
+            }; 
+            reader.readAsText(file);
         }
 
         // Custom schedule functions
@@ -581,60 +1432,142 @@
             const time = document.getElementById('add-time').value;
             const subject = document.getElementById('add-subject').value;
             const type = document.getElementById('add-type').value;
-            if (!date) { alert('Select date first'); return; }
+            
+            if (!date) { 
+                alert('Please select a date first'); 
+                return; 
+            }
+            
             if (!customSchedule[date]) customSchedule[date] = [];
-            // remove existing class at same time
+            
+            // Remove existing class at same time
             customSchedule[date] = customSchedule[date].filter(cls => cls.time !== time);
             customSchedule[date].push({ time, subject, type });
             customSchedule[date].sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
+            
             localStorage.setItem('customSchedule', JSON.stringify(customSchedule));
-            displayCustomSchedule(); updateDate();
+            displayCustomSchedule(); 
+            updateDate();
+            showSuccessMessage(`Class added for ${date}! 📝`);
         }
 
         function displayCustomSchedule() {
             const display = document.getElementById('custom-schedule-display');
             const customDates = Object.keys(customSchedule).sort();
-            if (customDates.length === 0) { display.innerHTML = '<p>No custom schedule changes</p>'; return; }
+            
+            if (customDates.length === 0) { 
+                display.innerHTML = '<p style="color:#666;font-style:italic;">📅 No custom schedule changes yet</p>'; 
+                return; 
+            }
+            
             display.innerHTML = `
-                <h5>📅 Custom Schedule Changes:</h5>
-                ${customDates.map(date => {
+                <h5 style="color:#1976d2;margin-bottom:15px;">📅 Custom Schedule Changes:</h5>
+                ${customDates.map((date, index) => {
                     const dayName = getDayName(date);
-                    return `<div class="holiday-item"><div><strong>${date} (${dayName})</strong><br>${customSchedule[date].map(cls => `${cls.time}: ${cls.subject} (${cls.type === 'L' ? 'Lecture' : cls.type === 'P' ? 'Practical' : 'Tutorial'})`).join('<br>')}</div><button class="btn-remove" onclick="removeCustomSchedule('${date}')">Remove</button></div>`;
+                    return `
+                        <div class="timetable-item" style="animation-delay: ${index * 0.1}s;">
+                            <div>
+                                <strong style="color:#1976d2;">${date} (${dayName})</strong><br>
+                                ${customSchedule[date].map(cls => `
+                                    <span style="color:#666;">• ${cls.time}: ${cls.subject} (${cls.type === 'L' ? 'Lecture' : cls.type === 'P' ? 'Practical' : 'Tutorial'})</span>
+                                `).join('<br>')}
+                            </div>
+                            <button class="btn-remove" onclick="removeCustomSchedule('${date}')">🗑️ Remove</button>
+                        </div>`;
                 }).join('')}
             `;
         }
 
-        function removeCustomSchedule(date) { delete customSchedule[date]; localStorage.setItem('customSchedule', JSON.stringify(customSchedule)); displayCustomSchedule(); updateDate(); }
+        function removeCustomSchedule(date) { 
+            if (!confirm(`Remove all custom classes for ${date}?`)) return;
+            
+            delete customSchedule[date]; 
+            localStorage.setItem('customSchedule', JSON.stringify(customSchedule)); 
+            displayCustomSchedule(); 
+            updateDate(); 
+            showSuccessMessage(`Custom schedule for ${date} removed! 🗑️`);
+        }
 
         // Edit modal functions
         function openEditModal(date, time, subject, type) {
-            document.getElementById('overlay').classList.remove('hidden');
-            const modal = document.getElementById('edit-modal'); modal.classList.remove('hidden');
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('edit-modal');
+            
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                overlay.classList.add('show');
+                modal.classList.add('show');
+            }, 10);
+            
             document.getElementById('edit-modal-date-text').textContent = date;
             document.getElementById('edit-modal-time').textContent = time;
             document.getElementById('edit-modal-subject').value = subject || Object.keys(subjects)[0];
             document.getElementById('edit-modal-type').value = type || 'L';
-            modal.dataset.date = date; modal.dataset.time = time;
+            
+            modal.dataset.date = date; 
+            modal.dataset.time = time;
         }
 
-        function closeEditModal() { document.getElementById('overlay').classList.add('hidden'); document.getElementById('edit-modal').classList.add('hidden'); }
+        function closeEditModal() { 
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('edit-modal');
+            
+            overlay.classList.remove('show');
+            modal.classList.remove('show');
+            
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                modal.classList.add('hidden');
+            }, 300);
+        }
 
         function saveEditModal() {
             const modal = document.getElementById('edit-modal');
-            const date = modal.dataset.date; const time = modal.dataset.time;
-            const subject = document.getElementById('edit-modal-subject').value; const type = document.getElementById('edit-modal-type').value;
+            const date = modal.dataset.date; 
+            const time = modal.dataset.time;
+            const subject = document.getElementById('edit-modal-subject').value; 
+            const type = document.getElementById('edit-modal-type').value;
+            
             if (!customSchedule[date]) customSchedule[date] = [];
-            // remove any class at same time
+            
+            // Remove any class at same time
             customSchedule[date] = customSchedule[date].filter(c => c.time !== time);
             customSchedule[date].push({ time, subject, type });
             customSchedule[date].sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
+            
             localStorage.setItem('customSchedule', JSON.stringify(customSchedule));
-            closeEditModal(); displayCustomSchedule(); updateDate();
+            closeEditModal(); 
+            displayCustomSchedule(); 
+            updateDate();
+            showSuccessMessage('Class updated! ✏️');
         }
 
-        // initial populate for edit modal subject select
-        // already done in populateSubjectSelects
+        // Add click outside to close modals
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('overlay')) {
+                closeEditModal();
+                closeTimetableEditModal();
+            }
+        });
 
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEditModal();
+                closeTimetableEditModal();
+            }
+        });
+
+        // Add smooth transitions when switching views
+        function smoothTransition(callback) {
+            document.querySelector('.content:not(.hidden)').style.opacity = '0.5';
+            setTimeout(() => {
+                callback();
+                document.querySelector('.content:not(.hidden)').style.opacity = '1';
+            }, 150);
+        }
     </script>
 </body>
 </html>
