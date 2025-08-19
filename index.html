@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
             min-height: 100vh; 
-            padding: 20px; 
+            padding: 10px; 
             transition: all 0.3s ease;
         }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -20,39 +20,42 @@
         .header { 
             background: rgba(255,255,255,0.95); 
             backdrop-filter: blur(10px);
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
-            margin-bottom: 20px; 
+            margin-bottom: 15px; 
             animation: slideInFromTop 0.6s ease-out;
         }
         .header h1 { 
             color: #1976d2; 
             margin-bottom: 5px; 
-            font-size: 2.2em;
+            font-size: 1.8em;
             background: linear-gradient(45deg, #1976d2, #42a5f5);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header p { color: #666; font-size: 1.1em; }
+        .header p { color: #666; font-size: 1em; }
         
         .tabs { 
-            display: flex; 
-            gap: 5px; 
-            margin-top: 25px; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px; 
+            margin-top: 20px; 
             background: rgba(0,0,0,0.05);
-            padding: 5px;
+            padding: 8px;
             border-radius: 15px;
         }
         .tab { 
-            padding: 12px 24px; 
+            padding: 12px 8px; 
             border: none; 
             border-radius: 12px; 
             cursor: pointer; 
             background: transparent;
             color: #666;
             font-weight: 500;
+            font-size: 0.9em;
+            text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -78,16 +81,17 @@
         .content { 
             background: rgba(255,255,255,0.95); 
             backdrop-filter: blur(10px);
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
             animation: fadeInUp 0.5s ease-out;
         }
         
         .date-section { margin-bottom: 25px; }
-        .date-section h3 { color: #1976d2; margin-bottom: 15px; }
+        .date-section h3 { color: #1976d2; margin-bottom: 15px; font-size: 1.2em; }
         .date-section input { 
-            width: 220px; 
+            width: 100%; 
+            max-width: 250px;
             padding: 12px 16px; 
             border: 2px solid #e0e0e0; 
             border-radius: 12px; 
@@ -103,22 +107,24 @@
         
         .selected-info { 
             margin-top: 15px; 
-            padding: 20px; 
+            padding: 15px; 
             background: linear-gradient(45deg, #e3f2fd, #f3e5f5); 
             border-radius: 15px;
             border-left: 5px solid #1976d2;
             animation: slideInFromLeft 0.5s ease-out;
+            font-size: 0.95em;
         }
         
         .classes-grid { 
-            display: grid; 
-            gap: 20px; 
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
             animation: staggerIn 0.6s ease-out;
         }
         .class-item { 
             border: 2px solid #e0e0e0; 
             border-radius: 16px; 
-            padding: 20px; 
+            padding: 18px; 
             position: relative; 
             background: rgba(255,255,255,0.9);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -135,8 +141,8 @@
             transition: left 0.6s;
         }
         .class-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             border-color: #1976d2;
         }
         .class-item:hover::before { left: 100%; }
@@ -144,45 +150,69 @@
         .class-header { 
             display: flex; 
             justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
+            align-items: flex-start; 
+            margin-bottom: 12px; 
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .subject-info {
+            flex: 1;
+            min-width: 200px;
         }
         .subject-code { 
             background: linear-gradient(45deg, #1976d2, #42a5f5); 
             color: white; 
-            padding: 8px 16px; 
+            padding: 6px 12px; 
             border-radius: 20px; 
-            font-size: 13px; 
+            font-size: 12px; 
             font-weight: bold;
             box-shadow: 0 4px 15px rgba(25,118,210,0.3);
+            display: inline-block;
+            margin-bottom: 8px;
         }
         .class-type { 
-            padding: 6px 12px; 
+            padding: 4px 10px; 
             border-radius: 15px; 
-            font-size: 12px; 
-            margin-left: 12px;
+            font-size: 11px; 
+            margin-left: 8px;
             font-weight: 600;
+            display: inline-block;
         }
         .lecture { background: linear-gradient(45deg, #e8f5e8, #c8e6c9); color: #2e7d32; }
         .practical { background: linear-gradient(45deg, #fff3e0, #ffe0b2); color: #ef6c00; }
         .tutorial { background: linear-gradient(45deg, #f3e5f5, #e1bee7); color: #7b1fa2; }
         
+        .class-title {
+            font-weight: 600;
+            margin: 8px 0;
+            font-size: 0.95em;
+            line-height: 1.3;
+        }
+        .class-time {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+        
         .attendance-buttons { 
             display: flex; 
-            gap: 12px; 
+            gap: 8px; 
             margin-top: 15px; 
             animation: slideInFromBottom 0.4s ease-out;
+            flex-wrap: wrap;
         }
         .btn { 
-            padding: 10px 20px; 
+            padding: 10px 16px; 
             border: none; 
             border-radius: 25px; 
             cursor: pointer; 
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            flex: 1;
+            min-width: 80px;
         }
         .btn::before {
             content: '';
@@ -208,26 +238,26 @@
         .btn-absent.selected { background: linear-gradient(45deg, #c62828, #d32f2f); transform: scale(1.05); }
         
         .summary-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; 
+            display: flex;
+            flex-direction: column;
+            gap: 20px; 
         }
         .summary-card { 
             background: linear-gradient(45deg, #f8f9fa, #ffffff); 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             border: 2px solid transparent;
             transition: all 0.3s ease;
         }
         .summary-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             border-color: #1976d2;
         }
         .percentage { 
-            font-size: 2.5em; 
+            font-size: 2.2em; 
             font-weight: 700; 
-            margin: 15px 0;
+            margin: 12px 0;
             background: linear-gradient(45deg, #1976d2, #42a5f5);
             background-clip: text;
             -webkit-background-clip: text;
@@ -240,8 +270,8 @@
         .hidden { display: none; }
         
         .export-section, .holiday-section, .edit-section, .timetable-section { 
-            margin: 25px 0; 
-            padding: 20px; 
+            margin: 20px 0; 
+            padding: 18px; 
             background: linear-gradient(45deg, #f0f8ff, #e6f3ff); 
             border-radius: 16px;
             border: 2px solid rgba(25,118,210,0.1);
@@ -251,14 +281,14 @@
         
         .export-buttons, .timetable-actions { 
             display: flex; 
-            gap: 12px; 
-            flex-wrap: wrap; 
+            gap: 10px; 
+            flex-direction: column;
             margin-top: 15px;
         }
         .btn-export, .btn-timetable { 
             background: linear-gradient(45deg, #1976d2, #42a5f5); 
             color: white; 
-            padding: 12px 24px; 
+            padding: 12px 20px; 
             border: none; 
             border-radius: 25px; 
             cursor: pointer;
@@ -266,25 +296,25 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
         .btn-export:hover, .btn-timetable:hover { 
-            transform: translateY(-3px); 
+            transform: translateY(-2px); 
             box-shadow: 0 8px 25px rgba(25,118,210,0.3);
         }
         .btn-export:active, .btn-timetable:active { transform: translateY(-1px); }
         
         .holiday-input, .edit-input { 
             display: flex; 
+            flex-direction: column;
             gap: 12px; 
-            align-items: center; 
             margin: 15px 0; 
-            flex-wrap: wrap; 
         }
         .holiday-list { margin-top: 20px; }
         .holiday-item, .timetable-item { 
             display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+            flex-direction: column;
+            gap: 10px;
             padding: 15px; 
             background: rgba(255,255,255,0.9); 
             border-radius: 12px; 
@@ -295,7 +325,17 @@
         }
         .holiday-item:hover, .timetable-item:hover {
             border-color: #1976d2;
-            transform: translateX(5px);
+            transform: translateY(-2px);
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        .item-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
         }
         
         .btn-remove, .btn-edit-time { 
@@ -309,9 +349,11 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        .btn-edit-time { background: linear-gradient(45deg, #ff9800, #ffb74d); margin-right: 8px; }
-        .btn-remove:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(244,67,54,0.3); }
-        .btn-edit-time:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(255,152,0,0.3); }
+        .btn-edit-time { background: linear-gradient(45deg, #ff9800, #ffb74d); }
+        .btn-remove:hover, .btn-edit-time:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 4px 15px rgba(244,67,54,0.3); 
+        }
         
         .btn-add { 
             background: linear-gradient(45deg, #4caf50, #66bb6a); 
@@ -322,13 +364,14 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            width: 100%;
         }
         .btn-add:hover { 
             transform: translateY(-2px); 
             box-shadow: 0 6px 20px rgba(76,175,80,0.3);
         }
         
-        .settings-view { max-width: 900px; }
+        .settings-view { max-width: 100%; }
         .btn-undo { 
             background: linear-gradient(45deg, #ff9800, #ffb74d); 
             color: white; 
@@ -337,7 +380,6 @@
             border-radius: 20px; 
             cursor: pointer; 
             font-size: 12px; 
-            margin-left: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -347,49 +389,52 @@
         }
         
         .footer { 
-            margin-top: 40px; 
+            margin-top: 30px; 
             background: rgba(255,255,255,0.95); 
             backdrop-filter: blur(10px);
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
             text-align: center;
             animation: slideInFromBottom 0.6s ease-out;
         }
-        .footer h4 { color: #1976d2; margin-bottom: 20px; font-size: 1.4em; }
+        .footer h4 { color: #1976d2; margin-bottom: 20px; font-size: 1.2em; }
         .contact-info { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px; 
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
             text-align: left; 
         }
         .contact-item { 
             background: linear-gradient(45deg, #f5f5f5, #fafafa); 
-            padding: 20px; 
+            padding: 15px; 
             border-radius: 15px;
             border: 2px solid transparent;
             transition: all 0.3s ease;
         }
         .contact-item:hover {
             border-color: #1976d2;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         .contact-item strong { color: #1976d2; }
         .contact-item a { color: #1976d2; text-decoration: none; transition: color 0.3s ease; }
         .contact-item a:hover { color: #0d47a1; text-decoration: underline; }
         
-        /* Modal */
+        /* Modal - Mobile Optimized */
         .modal { 
             position: fixed; 
             left: 50%; 
             top: 50%; 
             transform: translate(-50%, -50%) scale(0.8); 
             background: white; 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 20px; 
             box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
             z-index: 9999; 
-            width: 400px;
+            width: 95%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -397,7 +442,7 @@
             transform: translate(-50%, -50%) scale(1); 
             opacity: 1;
         }
-        .modal h4 { margin-bottom: 15px; color: #1976d2; }
+        .modal h4 { margin-bottom: 15px; color: #1976d2; font-size: 1.1em; }
         .overlay { 
             position: fixed; 
             inset: 0; 
@@ -410,7 +455,7 @@
         
         .add-slot { 
             margin-top: 20px; 
-            padding: 20px; 
+            padding: 18px; 
             background: linear-gradient(45deg, #f5f5f5, #fafafa); 
             border-radius: 16px;
             border: 2px solid rgba(25,118,210,0.1);
@@ -419,18 +464,22 @@
         .add-slot:hover {
             border-color: rgba(25,118,210,0.3);
         }
+        .add-slot h4 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
         
-        /* Timetable specific styles */
+        /* Timetable specific styles - Mobile Optimized */
         .timetable-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             margin-top: 20px;
         }
         .day-schedule {
             background: rgba(255,255,255,0.9);
             border-radius: 15px;
-            padding: 20px;
+            padding: 18px;
             border: 2px solid rgba(25,118,210,0.1);
             transition: all 0.3s ease;
         }
@@ -440,7 +489,7 @@
         }
         .day-title {
             color: #1976d2;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: 700;
             margin-bottom: 15px;
             padding-bottom: 10px;
@@ -448,8 +497,8 @@
         }
         .time-slot {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
             padding: 12px;
             margin: 8px 0;
             background: #f8f9fa;
@@ -461,28 +510,70 @@
             background: #e3f2fd;
             border-color: #1976d2;
         }
+        .time-slot-info {
+            flex: 1;
+        }
         .time-slot-actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            justify-content: flex-end;
         }
         
         .form-row {
             display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin: 10px 0;
+            flex-direction: column;
+            gap: 12px;
+            margin: 12px 0;
         }
         .form-row input, .form-row select {
-            padding: 10px 14px;
+            padding: 12px 14px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             transition: all 0.3s ease;
+            font-size: 16px; /* Prevents zoom on iOS */
+            width: 100%;
         }
         .form-row input:focus, .form-row select:focus {
             outline: none;
             border-color: #1976d2;
             box-shadow: 0 0 0 3px rgba(25,118,210,0.1);
+        }
+        
+        /* Modal form rows for better mobile experience */
+        .modal .form-row {
+            gap: 10px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-direction: column;
+        }
+        .modal-actions button {
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Edit button in class header - Mobile optimized */
+        .edit-button {
+            background: linear-gradient(45deg, #ff9800, #ffb74d);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .edit-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255,152,0,0.3);
         }
         
         /* Animations */
@@ -519,34 +610,228 @@
             animation: pulse 0.6s ease-in-out;
         }
         
-        /* Success message */
+        /* Success message - Mobile optimized */
         .success-message {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            left: 15px;
+            right: 15px;
             background: linear-gradient(45deg, #4caf50, #66bb6a);
             color: white;
-            padding: 15px 25px;
-            border-radius: 25px;
+            padding: 15px 20px;
+            border-radius: 15px;
             font-weight: 600;
             z-index: 10000;
-            transform: translateX(400px);
+            transform: translateY(-100px);
             transition: transform 0.3s ease;
             box-shadow: 0 8px 32px rgba(76,175,80,0.3);
+            text-align: center;
         }
         .success-message.show {
-            transform: translateX(0);
+            transform: translateY(0);
         }
         
-        /* Responsive */
+        /* Mobile-specific optimizations */
         @media (max-width: 768px) {
-            .container { padding: 10px; }
-            .header { padding: 20px 15px; }
-            .content { padding: 20px 15px; }
-            .tabs { flex-direction: column; }
-            .tab { text-align: center; }
-            .form-row { flex-direction: column; align-items: stretch; }
-            .modal { width: 90%; max-width: 350px; }
+            body { padding: 5px; }
+            
+            .header { 
+                padding: 15px; 
+                margin-bottom: 10px;
+            }
+            .header h1 { font-size: 1.6em; }
+            
+            .content { padding: 15px; }
+            
+            .tabs { 
+                gap: 5px;
+                padding: 5px;
+            }
+            .tab { 
+                padding: 10px 6px;
+                font-size: 0.85em;
+            }
+            
+            .class-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .subject-info {
+                width: 100%;
+                min-width: auto;
+            }
+            .subject-code {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+            .class-type {
+                font-size: 10px;
+                padding: 3px 8px;
+                margin-left: 6px;
+            }
+            
+            .attendance-buttons {
+                gap: 6px;
+            }
+            .btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-width: 70px;
+            }
+            
+            .btn-undo {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            
+            .edit-button {
+                padding: 5px 10px;
+                font-size: 10px;
+            }
+            
+            .percentage { font-size: 2em; }
+            
+            .export-buttons, .timetable-actions {
+                gap: 8px;
+            }
+            
+            .modal { 
+                width: 95%; 
+                max-width: 350px; 
+                padding: 18px;
+                margin: 10px;
+            }
+            
+            .time-slot {
+                padding: 10px;
+            }
+            .time-slot-actions {
+                gap: 6px;
+            }
+            
+            .holiday-item, .timetable-item {
+                padding: 12px;
+            }
+            
+            .contact-info {
+                gap: 12px;
+            }
+            .contact-item {
+                padding: 12px;
+            }
+            
+            .footer {
+                padding: 15px;
+                margin-top: 20px;
+            }
+            
+            /* Better touch targets */
+            .btn, .btn-export, .btn-timetable, .btn-add, .btn-remove, .btn-edit-time, .btn-undo {
+                min-height: 44px; /* Apple's recommended minimum touch target */
+            }
+            
+            /* Improved form elements for mobile */
+            .form-row input, .form-row select {
+                min-height: 44px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            /* Better spacing for mobile */
+            .date-section, .holiday-section, .edit-section, .timetable-section {
+                margin: 15px 0;
+                padding: 15px;
+            }
+            
+            .selected-info {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.4em; }
+            .header p { font-size: 0.9em; }
+            
+            .tab { 
+                padding: 8px 4px;
+                font-size: 0.8em;
+            }
+            
+            .subject-code {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+            .class-type {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+            
+            .btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                min-width: 60px;
+            }
+            
+            .percentage { font-size: 1.8em; }
+            
+            .modal {
+                padding: 15px;
+            }
+            
+            .success-message {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+        }
+        
+        /* Landscape orientation on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .summary-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .export-buttons, .timetable-actions {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .btn-export, .btn-timetable {
+                flex: 1;
+                min-width: 140px;
+            }
+        }
+        
+        /* Better focus indicators for accessibility */
+        .btn:focus, .tab:focus, input:focus, select:focus {
+            outline: 3px solid rgba(25,118,210,0.5);
+            outline-offset: 2px;
+        }
+        
+        /* Prevent text selection on buttons */
+        .btn, .tab, .btn-export, .btn-timetable, .btn-add, .btn-remove, .btn-edit-time, .btn-undo {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading state styles */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        /* Better mobile scrolling */
+        .modal {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -556,7 +841,7 @@
             <h1>📚 Attendance Tracker</h1>
             <p>National Diploma in Technology - Moratuwa</p>
             <div class="tabs">
-                <button class="tab active" onclick="showView('daily', event)">📅 Daily View</button>
+                <button class="tab active" onclick="showView('daily', event)">📅 Daily</button>
                 <button class="tab" onclick="showView('summary', event)">📊 Summary</button>
                 <button class="tab" onclick="showView('settings', event)">⚙️ Settings</button>
             </div>
@@ -681,7 +966,7 @@
             </div>
             
             <div class="holiday-section">
-                <h4>🏖️ Holiday Management</h4>
+                <h4>🖤 Holiday Management</h4>
                 <p>Mark days as holidays to exclude them from attendance calculations.</p>
                 
                 <div class="holiday-input">
@@ -706,7 +991,7 @@
             <div class="export-section">
                 <h4>💾 Data Management</h4>
                 <div class="export-buttons">
-                    <button class="btn-export" onclick="clearAllData()" style="background: linear-gradient(45deg, #f44336, #ef5350);">🗑️ Clear All Data</button>
+                    <button class="btn-export" onclick="clearAllData()" style="background: linear-gradient(45d, #f44336, #ef5350);">🗑️ Clear All Data</button>
                     <button class="btn-export" onclick="exportData()">💾 Backup Data</button>
                     <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(event)" />
                     <button class="btn-export" onclick="document.getElementById('import-file').click()">📂 Import Data</button>
@@ -731,7 +1016,7 @@
                 </div>
                 <div class="contact-item">
                     <strong>💼 LinkedIn:</strong><br>
-                    <a href="https://www.linkedin.com/in/w-nirman-achintha/" target="_blank">W.Nirman Achintha | LinkedIn</a>
+                    <a href="https://www.linkedin.com/in/w-nirman-achintha/" target="_blank">W.Nirman Achintha</a>
                 </div>
                 <div class="contact-item">
                     <strong>💻 GitHub:</strong><br>
@@ -742,7 +1027,7 @@
     </div>
 
     <!-- Edit modal -->
-    <div id="overlay" class="overlay hidden"></div>
+    <div id="overlay" class="overlay hidden" onclick="closeEditModal()"></div>
     <div id="edit-modal" class="modal hidden" role="dialog" aria-hidden="true">
         <h4>✏️ Edit Class</h4>
         <div><strong>Date:</strong> <span id="edit-modal-date-text"></span></div>
@@ -755,9 +1040,9 @@
                 <option value="T">Tutorial</option>
             </select>
         </div>
-        <div style="margin-top:20px;display:flex;gap:12px;justify-content:flex-end;">
-            <button class="btn-undo" onclick="closeEditModal()">❌ Cancel</button>
+        <div class="modal-actions">
             <button class="btn-add" onclick="saveEditModal()">💾 Save</button>
+            <button class="btn-undo" onclick="closeEditModal()">❌ Cancel</button>
         </div>
     </div>
 
@@ -774,10 +1059,10 @@
                 <option value="T">Tutorial</option>
             </select>
         </div>
-        <div style="margin-top:20px;display:flex;gap:12px;justify-content:flex-end;">
+        <div class="modal-actions">
+            <button class="btn-add" onclick="saveTimetableEdit()">💾 Save</button>
             <button class="btn-remove" onclick="removeTimetableSlot()">🗑️ Remove</button>
             <button class="btn-undo" onclick="closeTimetableEditModal()">❌ Cancel</button>
-            <button class="btn-add" onclick="saveTimetableEdit()">💾 Save</button>
         </div>
     </div>
 
@@ -852,13 +1137,30 @@
             'Sunday': []
         };
 
+        // Initialize storage with fallback for environments without localStorage
+        function getStorageItem(key, defaultValue = null) {
+            try {
+                return JSON.parse(localStorage.getItem(key)) || defaultValue;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+
+        function setStorageItem(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.warn('Storage not available, using memory only');
+            }
+        }
+
         // Current schedule (can be modified)
-        let schedule = JSON.parse(localStorage.getItem('schedule')) || JSON.parse(JSON.stringify(defaultSchedule));
+        let schedule = getStorageItem('schedule') || JSON.parse(JSON.stringify(defaultSchedule));
 
         // Attendance data
-        let attendanceData = JSON.parse(localStorage.getItem('attendanceData') || '{}');
-        let holidays = JSON.parse(localStorage.getItem('holidays') || '{}');
-        let customSchedule = JSON.parse(localStorage.getItem('customSchedule') || '{}');
+        let attendanceData = getStorageItem('attendanceData') || {};
+        let holidays = getStorageItem('holidays') || {};
+        let customSchedule = getStorageItem('customSchedule') || {};
 
         // Init
         const datePicker = document.getElementById('date-picker');
@@ -968,7 +1270,7 @@
             if (holidays[date]) {
                 classList.innerHTML = `
                     <div class="class-item" style="background:linear-gradient(45deg, #ffecb3, #fff8e1);border-color:#ff9800;">
-                        <p style="font-size:1.2em;">🏖️ Holiday: ${holidays[date]}</p>
+                        <p style="font-size:1.1em;">🖤 Holiday: ${holidays[date]}</p>
                         <p style="color:#666;margin-top:8px;">No classes scheduled</p>
                     </div>`;
                 return;
@@ -978,7 +1280,7 @@
             if (classes.length === 0) {
                 classList.innerHTML = `
                     <div class="class-item" style="background:linear-gradient(45deg, #f5f5f5, #fafafa);">
-                        <p style="font-size:1.2em;">📅 No classes scheduled for this day</p>
+                        <p style="font-size:1.1em;">📅 No classes scheduled for this day</p>
                         <p style="color:#666;margin-top:8px;">Enjoy your free day!</p>
                     </div>`;
                 return;
@@ -993,16 +1295,16 @@
                 return `
                     <div class="class-item" style="animation-delay: ${index * 0.1}s;">
                         <div class="class-header">
-                            <div>
-                                <span class="subject-code">${cls.subject}</span>
-                                <span class="class-type ${typeClass}">${typeName}</span>
+                            <div class="subject-info">
+                                <div>
+                                    <span class="subject-code">${cls.subject}</span>
+                                    <span class="class-type ${typeClass}">${typeName}</span>
+                                </div>
+                                <div class="class-title">${subjects[cls.subject] || cls.subject}</div>
+                                <div class="class-time">⏰ ${cls.time}</div>
                             </div>
-                            <div style="display:flex;gap:8px;align-items:center;">
-                                <button class="btn-edit-time" onclick="openEditModal('${date}','${cls.time}','${cls.subject}','${cls.type}')">✏️ Edit</button>
-                            </div>
+                            <button class="edit-button" onclick="openEditModal('${date}','${cls.time}','${cls.subject}','${cls.type}')">✏️</button>
                         </div>
-                        <p style="font-weight:600;margin:8px 0;"><strong>${subjects[cls.subject] || cls.subject}</strong></p>
-                        <p style="color:#666;">⏰ ${cls.time}</p>
                         <div class="attendance-buttons">
                             <button class="btn btn-present ${status === 'present' ? 'selected' : ''}" onclick="markAttendance('${date}','${cls.time}','${cls.subject}','present')">✅ Present</button>
                             <button class="btn btn-absent ${status === 'absent' ? 'selected' : ''}" onclick="markAttendance('${date}','${cls.time}','${cls.subject}','absent')">❌ Absent</button>
@@ -1016,7 +1318,7 @@
         function markAttendance(date, time, subject, status) {
             const key = `${date}-${subject}-${time}`;
             attendanceData[key] = status;
-            localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            setStorageItem('attendanceData', attendanceData);
             
             // Success animation
             const button = event.target;
@@ -1029,7 +1331,7 @@
         function undoAttendance(date, time, subject) {
             const key = `${date}-${subject}-${time}`;
             delete attendanceData[key];
-            localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            setStorageItem('attendanceData', attendanceData);
             showSuccessMessage('Attendance record removed ↩️');
             updateDate();
         }
@@ -1091,7 +1393,7 @@
                             '<p style="color:#666;font-style:italic;">No classes scheduled</p>' :
                             dayClasses.map(cls => `
                                 <div class="time-slot">
-                                    <div>
+                                    <div class="time-slot-info">
                                         <strong>${cls.time}</strong><br>
                                         <span style="color:#1976d2;">${cls.subject}</span> - 
                                         <span class="class-type ${cls.type === 'L' ? 'lecture' : cls.type === 'P' ? 'practical' : 'tutorial'}">${cls.type === 'L' ? 'Lecture' : cls.type === 'P' ? 'Practical' : 'Tutorial'}</span>
@@ -1123,7 +1425,7 @@
             schedule[day].push({ time, subject, type });
             schedule[day].sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
             
-            localStorage.setItem('schedule', JSON.stringify(schedule));
+            setStorageItem('schedule', schedule);
             displayTimetable();
             showSuccessMessage(`Added ${subject} to ${day} timetable! 📚`);
         }
@@ -1133,7 +1435,7 @@
             
             if (schedule[day]) {
                 schedule[day] = schedule[day].filter(cls => cls.time !== time);
-                localStorage.setItem('schedule', JSON.stringify(schedule));
+                setStorageItem('schedule', schedule);
                 displayTimetable();
                 showSuccessMessage(`Removed ${time} slot from ${day} 🗑️`);
             }
@@ -1143,7 +1445,7 @@
             if (!confirm('Reset timetable to default? This will remove all your custom changes to the weekly schedule.')) return;
             
             schedule = JSON.parse(JSON.stringify(defaultSchedule));
-            localStorage.setItem('schedule', JSON.stringify(schedule));
+            setStorageItem('schedule', schedule);
             displayTimetable();
             showSuccessMessage('Timetable reset to default! 🔄');
         }
@@ -1194,7 +1496,7 @@
                 const classIndex = schedule[day].findIndex(cls => cls.time === oldTime);
                 if (classIndex !== -1) {
                     schedule[day][classIndex] = { time: oldTime, subject, type };
-                    localStorage.setItem('schedule', JSON.stringify(schedule));
+                    setStorageItem('schedule', schedule);
                     displayTimetable();
                     showSuccessMessage('Timetable updated! 💾');
                 }
@@ -1214,7 +1516,7 @@
             }
             
             holidays[date] = name;
-            localStorage.setItem('holidays', JSON.stringify(holidays));
+            setStorageItem('holidays', holidays);
             
             document.getElementById('holiday-date').value = '';
             document.getElementById('holiday-name').value = '';
@@ -1226,7 +1528,7 @@
         function removeHoliday(date) {
             const holidayName = holidays[date];
             delete holidays[date];
-            localStorage.setItem('holidays', JSON.stringify(holidays));
+            setStorageItem('holidays', holidays);
             displayHolidays();
             showSuccessMessage(`Holiday "${holidayName}" removed 🗑️`);
         }
@@ -1244,11 +1546,13 @@
                 const dayName = getDayName(date);
                 return `
                     <div class="holiday-item" style="animation-delay: ${index * 0.1}s;">
-                        <span>
+                        <div class="item-content">
                             <strong style="color:#1976d2;">${holidays[date]}</strong><br>
                             <span style="color:#666;">${date} (${dayName})</span>
-                        </span>
-                        <button class="btn-remove" onclick="removeHoliday('${date}')">🗑️ Remove</button>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-remove" onclick="removeHoliday('${date}')">🗑️ Remove</button>
+                        </div>
                     </div>`;
             }).join('');
         }
@@ -1345,26 +1649,49 @@
 
         function copyToClipboard() {
             const report = generateAttendanceReport();
-            navigator.clipboard.writeText(report).then(() => { 
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(report).then(() => { 
+                    showSuccessMessage('Report copied to clipboard! 📋');
+                }).catch(() => { 
+                    fallbackCopyTextToClipboard(report);
+                });
+            } else {
+                fallbackCopyTextToClipboard(report);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
                 showSuccessMessage('Report copied to clipboard! 📋');
-            }).catch(() => { 
-                const textarea = document.createElement('textarea'); 
-                textarea.value = report; 
-                document.body.appendChild(textarea); 
-                textarea.select(); 
-                document.execCommand('copy'); 
-                document.body.removeChild(textarea); 
-                showSuccessMessage('Report copied to clipboard! 📋');
-            });
+            } catch (err) {
+                console.error('Fallback: Could not copy text: ', err);
+                alert('Could not copy to clipboard. Please try the export options instead.');
+            }
+            
+            document.body.removeChild(textArea);
         }
 
         // Data management
         function clearAllData() {
             if (!confirm('⚠️ Clear all attendance data? This action cannot be undone!')) return;
             
-            localStorage.removeItem('attendanceData'); 
-            localStorage.removeItem('holidays'); 
-            localStorage.removeItem('customSchedule'); 
+            try {
+                localStorage.removeItem('attendanceData'); 
+                localStorage.removeItem('holidays'); 
+                localStorage.removeItem('customSchedule'); 
+            } catch (e) {
+                console.warn('Could not clear localStorage');
+            }
             
             attendanceData = {}; 
             holidays = {}; 
@@ -1408,10 +1735,10 @@
                     if (data.customSchedule) customSchedule = data.customSchedule; 
                     if (data.schedule) schedule = data.schedule;
                     
-                    localStorage.setItem('attendanceData', JSON.stringify(attendanceData)); 
-                    localStorage.setItem('holidays', JSON.stringify(holidays)); 
-                    localStorage.setItem('customSchedule', JSON.stringify(customSchedule)); 
-                    localStorage.setItem('schedule', JSON.stringify(schedule));
+                    setStorageItem('attendanceData', attendanceData); 
+                    setStorageItem('holidays', holidays); 
+                    setStorageItem('customSchedule', customSchedule); 
+                    setStorageItem('schedule', schedule);
                     
                     updateDate(); 
                     displayHolidays(); 
@@ -1445,7 +1772,7 @@
             customSchedule[date].push({ time, subject, type });
             customSchedule[date].sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
             
-            localStorage.setItem('customSchedule', JSON.stringify(customSchedule));
+            setStorageItem('customSchedule', customSchedule);
             displayCustomSchedule(); 
             updateDate();
             showSuccessMessage(`Class added for ${date}! 📝`);
@@ -1466,13 +1793,15 @@
                     const dayName = getDayName(date);
                     return `
                         <div class="timetable-item" style="animation-delay: ${index * 0.1}s;">
-                            <div>
+                            <div class="item-content">
                                 <strong style="color:#1976d2;">${date} (${dayName})</strong><br>
                                 ${customSchedule[date].map(cls => `
                                     <span style="color:#666;">• ${cls.time}: ${cls.subject} (${cls.type === 'L' ? 'Lecture' : cls.type === 'P' ? 'Practical' : 'Tutorial'})</span>
                                 `).join('<br>')}
                             </div>
-                            <button class="btn-remove" onclick="removeCustomSchedule('${date}')">🗑️ Remove</button>
+                            <div class="item-actions">
+                                <button class="btn-remove" onclick="removeCustomSchedule('${date}')">🗑️ Remove</button>
+                            </div>
                         </div>`;
                 }).join('')}
             `;
@@ -1482,7 +1811,7 @@
             if (!confirm(`Remove all custom classes for ${date}?`)) return;
             
             delete customSchedule[date]; 
-            localStorage.setItem('customSchedule', JSON.stringify(customSchedule)); 
+            setStorageItem('customSchedule', customSchedule); 
             displayCustomSchedule(); 
             updateDate(); 
             showSuccessMessage(`Custom schedule for ${date} removed! 🗑️`);
@@ -1537,36 +1866,110 @@
             customSchedule[date].push({ time, subject, type });
             customSchedule[date].sort((a, b) => convertToMinutes(a.time) - convertToMinutes(b.time));
             
-            localStorage.setItem('customSchedule', JSON.stringify(customSchedule));
+            setStorageItem('customSchedule', customSchedule);
             closeEditModal(); 
             displayCustomSchedule(); 
             updateDate();
             showSuccessMessage('Class updated! ✏️');
         }
 
+        // Enhanced modal management for mobile
+        function closeAllModals() {
+            closeEditModal();
+            closeTimetableEditModal();
+        }
+
         // Add click outside to close modals
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('overlay')) {
-                closeEditModal();
-                closeTimetableEditModal();
+                closeAllModals();
             }
         });
 
         // Add keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closeEditModal();
-                closeTimetableEditModal();
+                closeAllModals();
             }
         });
 
+        // Touch event handling for better mobile experience
+        let touchStartY = 0;
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            // Prevent rubber band scrolling on iOS when at top/bottom
+            const modal = document.querySelector('.modal:not(.hidden)');
+            if (modal) {
+                const modalRect = modal.getBoundingClientRect();
+                const touchY = e.touches[0].clientY;
+                
+                if (touchY < modalRect.top || touchY > modalRect.bottom) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Prevent zoom on double tap for buttons
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
         // Add smooth transitions when switching views
         function smoothTransition(callback) {
-            document.querySelector('.content:not(.hidden)').style.opacity = '0.5';
-            setTimeout(() => {
-                callback();
-                document.querySelector('.content:not(.hidden)').style.opacity = '1';
-            }, 150);
+            const activeContent = document.querySelector('.content:not(.hidden)');
+            if (activeContent) {
+                activeContent.style.opacity = '0.5';
+                setTimeout(() => {
+                    callback();
+                    activeContent.style.opacity = '1';
+                }, 150);
+            }
+        }
+
+        // Enhanced viewport handling for mobile
+        function handleViewportChanges() {
+            // Adjust for mobile keyboards
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        window.addEventListener('resize', handleViewportChanges);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(handleViewportChanges, 500);
+        });
+
+        // Initialize viewport
+        handleViewportChanges();
+
+        // Add loading states for better UX
+        function showLoading(element) {
+            element.classList.add('loading');
+        }
+
+        function hideLoading(element) {
+            element.classList.remove('loading');
+        }
+
+        // Enhanced error handling
+        window.addEventListener('error', function(e) {
+            console.error('Application error:', e);
+            showSuccessMessage('⚠️ Something went wrong. Please try again.');
+        });
+
+        // Service worker registration for offline functionality (if needed)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // Service worker can be registered here for offline support
+                console.log('App ready for offline enhancements');
+            });
         }
     </script>
 </body>
